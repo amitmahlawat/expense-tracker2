@@ -1,5 +1,6 @@
 import React,{useRef} from "react";
 import { Container,Row,Col, Form ,Card,Button,NavLink, Nav} from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const Signup=()=>{
 const EmailRef=useRef();
@@ -68,7 +69,7 @@ const formSubmitHandler=(e)=>{
                 </Card>
                 
                 <Card className="mt-2" style={{padding:'0'}}>
-                <p style={{textAlign:'center', fontSize:'15px',marginTop:'5px',marginBottom:'5px'}}>Have an Account?<Nav.Item><NavLink>Login</NavLink></Nav.Item></p>
+                <p style={{textAlign:'center', fontSize:'15px',marginTop:'5px',marginBottom:'5px'}}>Have an Account?<Link to='/login'>Login</Link></p>
                 </Card>
                 
                 </Col>

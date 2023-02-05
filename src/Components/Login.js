@@ -7,9 +7,10 @@ import {
   Card,
   Button,
   NavLink,
+  Nav
 } from "react-bootstrap";
 import AuthContext from "./Auth-context";
-import { useHistory } from "react-router-dom";
+import { useHistory,Link } from "react-router-dom";
 
 const Login = () => {
 const history = useHistory()
@@ -110,8 +111,8 @@ const history = useHistory()
                 marginBottom: "5px",
               }}
             >
-              Don't have an Account?{" "}
-              <NavLink to="/signup">Sign up here</NavLink>
+              Don't have an Account ?
+              <Link to="/signup">Sign up </Link>
             </p>
           </Card>
         </Col>
