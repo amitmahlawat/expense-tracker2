@@ -17,6 +17,7 @@ export const AuthContextProvider=(props)=>{
     const[token,setToken]=useState(initialToken)
     const  userisLoggedIn=!!token
     
+    
   
     const loginHandler=(token)=>{
         
@@ -28,6 +29,7 @@ export const AuthContextProvider=(props)=>{
         setToken(null)
         localStorage.clear()
         console.log('click')
+        
     }
   
   

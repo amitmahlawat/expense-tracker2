@@ -7,10 +7,16 @@ import Login from "./Components/Login";
 import { Redirect, Route } from "react-router-dom";
 import Welcome from "./Components/WelcomePage";
 import UpdateProfile from "./Components/UpdateProfile";
+import { useHistory } from "react-router-dom";
+
+
+
 function App() {
+  const history=useHistory()
   const authCtx=useContext(AuthContext)
   const logoutHandler=()=>{
     authCtx.logout()
+    history.replace('/login')
   }
 
   return (
@@ -28,9 +34,9 @@ function App() {
       <Route path='/signup'>
       <Signup/>
       </Route>
-      <Route path='/login'>
+      {!authCtx.isLoggedIn &&<Route path='/login'>
       <Login/>
-      </Route>
+      </Route>}
       
     </div>
   );
