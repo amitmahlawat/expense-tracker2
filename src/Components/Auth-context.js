@@ -27,6 +27,7 @@ export const AuthContextProvider=(props)=>{
     const logoutHandler=()=>{
         setToken(null)
         localStorage.clear()
+        console.log('click')
     }
   
   

@@ -8,6 +8,7 @@ const[completed,SetCompleted]=useState(0)
 const[nameUpdate,SetnameUpdate]=useState(false)
 const[UrlUpdate,SetUrlUpdate]=useState(false)
 
+
 const NameRef=useRef();
 const urlRef=useRef();
 
@@ -22,6 +23,7 @@ const nameChangeHandler=()=>{
 }
 
 const UrlChangeHandler=()=>{
+
     if(urlRef.current.value){
         SetUrlUpdate(true)
     }else{
@@ -64,6 +66,7 @@ useEffect(()=>{
         }).then(res=>{
             res.json().then(data=>{
                 console.log(data)
+               
                 
                 
             })
@@ -82,13 +85,15 @@ useEffect(()=>{
                 'Content-Type':'/application/jason'
             }
             }).then(res=>{
+                if(res.ok){
             res.json().then(data=>{
+                if(data.users[0].displayName && data.users[0].photoUrl ){
                 NameRef.current.value=data.users[0].displayName
                 SetnameUpdate(true)
                 console.log(data.users[0])
                 urlRef.current.value=data.users[0].photoUrl
-                SetUrlUpdate(true)
-            })
+                SetUrlUpdate(true)}
+            })}
         })
     },[])
 

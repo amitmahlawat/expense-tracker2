@@ -54,12 +54,13 @@ const history = useHistory()
   };
 
   return (
-    <Container>
+    <body style={{backgroundImage:'url(logo512.png)',backgroundRepeat:'no-repeat',backgroundPosition:'25% center',backgroundSize:"200px 200px", backgroundAttachment:'fixed', borderStyle:'solid',borderTopWidth:'5px'}}>
+    <Container fluid>
       
       <Row className="mt-5">
         <Col></Col>
       </Row>
-
+    
       <Row className="mt-5">
         <Col></Col>
       </Row>
@@ -112,12 +113,13 @@ const history = useHistory()
               }}
             >
               Don't have an Account ?
-              <Link to="/signup">Sign up </Link>
+              <Link to="/signup" style={{textDecoration:"none",}}>Sign up </Link>
             </p>
           </Card>
         </Col>
       </Row>
     </Container>
+    </body>
   );
 };
 
