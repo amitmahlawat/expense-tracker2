@@ -54,7 +54,7 @@ const history = useHistory()
   };
 
   return (
-    <body style={{backgroundImage:'url(logo512.png)',backgroundRepeat:'no-repeat',backgroundPosition:'25% center',backgroundSize:"200px 200px", backgroundAttachment:'fixed', borderStyle:'solid',borderTopWidth:'5px'}}>
+    <body >
     <Container fluid>
       
       <Row className="mt-5">
@@ -89,12 +89,12 @@ const history = useHistory()
                   ref={PasswordRef}
                   required
                 ></Form.Control>
-
+              <Link to="/resetpassword" style={{textAlign:"center",textDecoration:"none",}}>Forgot password?</Link>
                 <div className="d-grid">
                   <Button
                     type="submit"
                     className="mt-4"
-                    style={{ borderRadius: "50px" }}
+                    style={{ borderRadius: "50px"}}
                   >
                     Login
                   </Button>

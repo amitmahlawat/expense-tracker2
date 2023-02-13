@@ -8,7 +8,7 @@ import { Redirect, Route } from "react-router-dom";
 import Welcome from "./Components/WelcomePage";
 import UpdateProfile from "./Components/UpdateProfile";
 import { useHistory } from "react-router-dom";
-
+import ResetPassword from "./Components/Resetpassword";
 
 
 function App() {
@@ -37,6 +37,9 @@ function App() {
       {!authCtx.isLoggedIn &&<Route path='/login'>
       <Login/>
       </Route>}
+      <Route path="/resetpassword">
+        <ResetPassword/>
+      </Route>
       
     </div>
   );
