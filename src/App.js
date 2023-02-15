@@ -9,7 +9,7 @@ import Welcome from "./Components/WelcomePage";
 import UpdateProfile from "./Components/UpdateProfile";
 import { useHistory } from "react-router-dom";
 import ResetPassword from "./Components/Resetpassword";
-
+import Expenses from "./Components/Expenses";
 
 function App() {
   const history=useHistory()
@@ -21,6 +21,9 @@ function App() {
 
   return (
     <div>
+      <Route path="/expenses">
+      <Expenses/>
+      </Route>
      {authCtx.isLoggedIn && <Button onClick={logoutHandler}>Logout</Button>}
       <Route path="/profile">
       <UpdateProfile/>
@@ -28,9 +31,9 @@ function App() {
       <Route path="/" exact>
         <Redirect to="/welcome"/>
       </Route>
-      <Route path="/welcome">
+      {authCtx.isLoggedIn &&<Route path="/welcome">
         <Welcome/>
-      </Route>
+      </Route>}
       <Route path='/signup'>
       <Signup/>
       </Route>
