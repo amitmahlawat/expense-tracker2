@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './ExpenseForm.css'
 import { useRef,useState } from "react";
 import ExpenseItem from "./ExpenseItem";
@@ -8,16 +8,51 @@ const ExpenseForm=()=>{
     const AmountRef=useRef();
     const DescriptionRef=useRef();
     const CategoryRef=useRef();
+
+    const FetchExpenseHandler=async()=>{
+
+            const response=await fetch('https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses.json/',)
+                if(!response.ok){
+                    throw new Error('something went wrong')
+                }
+                const data=await response.json()
+                // console.log(data)
+                const loadedExpense=[]
+                for(const key in data){
+                    loadedExpense.unshift({
+                        id:key,
+                       Amount:data[key].Amount,
+                       Category:data[key].Category,
+                       Description:data[key].Description
+                    })
+                    
+                }
+                SetItems(loadedExpense)
+                    // console.log(Items)
+            
+    }
+    useEffect(()=>{
+        FetchExpenseHandler()
+    },[])
     
-    const SubmitHandler=(e)=>{
+    const SubmitHandler=async(e)=>{
         e.preventDefault();
         const EnteredExpense={
             Amount:AmountRef.current.value,
             Description:DescriptionRef.current.value,
             Category:CategoryRef.current.value
         }
-        SetItems([...Items,EnteredExpense])
-        console.log(Items)
+        // SetItems([...Items,EnteredExpense])
+        const response=await fetch('https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses.json/',{
+            method:"POST",
+            body:JSON.stringify(EnteredExpense),
+                Headers:{
+                'Content-Type':"application/json"
+                }
+        })
+        const data=await response.json()
+        // console.log(data)
+        FetchExpenseHandler()
     }
     
     
