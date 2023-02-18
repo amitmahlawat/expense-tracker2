@@ -20,7 +20,7 @@ const ExpenseForm=()=>{
                 const loadedExpense=[]
                 for(const key in data){
                     loadedExpense.unshift({
-                        id:key,
+                        key:key,
                        Amount:data[key].Amount,
                        Category:data[key].Category,
                        Description:data[key].Description
@@ -52,7 +52,23 @@ const ExpenseForm=()=>{
         })
         const data=await response.json()
         // console.log(data)
+        AmountRef.current.value=''
+        DescriptionRef.current.value=''
+        CategoryRef.current.value=''
         FetchExpenseHandler()
+    }
+    const EditHandler=async(item)=>{
+        AmountRef.current.value=item.Amount
+        DescriptionRef.current.value=item.Description
+        CategoryRef.current.value=item.Category
+        const response=await fetch(`https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses/${item.key}.json`,{
+        method:'DELETE',
+        body:null,
+        headers:{
+            'Content-type':'application/json'
+          }
+    })
+    const data=await response.json();
     }
     
     
@@ -76,7 +92,7 @@ const ExpenseForm=()=>{
             </select><br/>
             <input className="input" style={{marginTop:"5px"}} type="submit"></input>
         </form>
-        <ExpenseItem Items={Items}></ExpenseItem>
+        <ExpenseItem fetch={FetchExpenseHandler} Edit={EditHandler} Items={Items}></ExpenseItem>
         </div>
 
 
