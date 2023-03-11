@@ -4,10 +4,12 @@ import { useRef,useState } from "react";
 import ExpenseItem from "./ExpenseItem";
 import { ExpenseActions } from "./store/index";
 import { useSelector,useDispatch } from "react-redux";
+import { ThemeActions } from "./store/theme";
 const ExpenseForm=()=>{
     const dataFetchedRef = useRef(false)
     const Expense = useSelector(state=>state.ExpenseReducer.Expenses)
     const totalAmount = useSelector(state=>state.ExpenseReducer.totalAmount)
+    const darkTheme = useSelector(state=>state.ThemeReducer.darkTheme)
     const dispatch = useDispatch()
     const AmountRef=useRef();
     const DescriptionRef=useRef();
@@ -95,6 +97,20 @@ const ExpenseForm=()=>{
     })
     const data=await response.json();
     }
+    const ThemeHandler = ()=>{
+        dispatch(ThemeActions.ApplyDarkTheme())
+        console.log('premium button clicked')
+    }
+
+
+    // const myJson=JSON.stringify(Expense)
+        
+    
+        const blob=new Blob(Expense.map((item)=>JSON.stringify(item)))
+        const href=URL.createObjectURL(blob)
+    
+    
+    
     
     
     
@@ -116,8 +132,10 @@ const ExpenseForm=()=>{
                 <option value="Travel">Travel</option>
             </select><br/>
             <input className="input" style={{marginTop:"5px"}} type="submit"></input>
-           {totalAmount>10000 &&<button style={{background:"orange",height:"30px",marginLeft:"5px"}}>Activate Premium</button>}
+           
         </form>
+        {totalAmount>10000 &&<button onClick={ThemeHandler} style={{background:"orange",height:"30px",marginLeft:"5px"}}>Activate Premium</button>}
+        <a download='file.csv' href={href} style={{height:"30px",marginLeft:"5px",marginLeft:"34%"}}>Download ExpenseList</a>
         <ExpenseItem fetch={FetchExpenseHandler} Edit={EditHandler} Items={Expense}></ExpenseItem>
         </div>
 

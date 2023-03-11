@@ -16,6 +16,7 @@ function App() {
   const dispatch=useDispatch()
   const totalAmount = useSelector(state=>state.ExpenseReducer.totalAmount)
 const IsLoggedIn=useSelector(state=>state.AuthReducer.isLoggedIn)
+const darkTheme = useSelector(state=>state.ThemeReducer.darkTheme)
   const history=useHistory()
 
   const logoutHandler=()=>{
@@ -25,7 +26,7 @@ const IsLoggedIn=useSelector(state=>state.AuthReducer.isLoggedIn)
   }
 
   return (
-    <div>
+    <div style={darkTheme ? {background:"black"} : {background:"white"}}>
       <Navbar style={{background:'black'}}>
       
       {IsLoggedIn && <Button  style={{marginLeft:"0%"}} variant=" btn-outline-info "><NavLink style={{textDecoration:"none"}} to='/expenses'>Expenses</NavLink></Button>}

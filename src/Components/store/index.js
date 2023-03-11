@@ -1,6 +1,6 @@
 import { legacy_createStore } from "redux";
 import { createSlice,configureStore } from "@reduxjs/toolkit";
-
+import ThemeReducer from './theme'
 const token = localStorage.getItem('token')
 const initialauthState={isLoggedIn:!!token}
 
@@ -42,23 +42,13 @@ const ExpenseSlice = createSlice({
         }
     }
 })
+
+
+
+
 export const ExpenseActions=ExpenseSlice.actions;
 export const authActions=AuthSlice.actions;
-const Store = configureStore({reducer:{AuthReducer: AuthSlice.reducer,ExpenseReducer:ExpenseSlice.reducer}})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const Store = configureStore({reducer:{AuthReducer: AuthSlice.reducer,ExpenseReducer:ExpenseSlice.reducer,ThemeReducer: ThemeReducer}})
 
 
 
