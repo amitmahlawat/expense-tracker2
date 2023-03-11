@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { isAccordionItemSelected } from "react-bootstrap/esm/AccordionContext";
-
+import { useSelector,useDispatch } from "react-redux";
+import { ExpenseActions } from "./store";
 const ExpenseItem = (props) => {
   const Items = props.Items;
+  
+  const Expense = useSelector(state=>state.ExpenseReducer.Expenses)
+  const totalAmount = useSelector(state=>state.ExpenseReducer.totalAmount)
+  const dispatch = useDispatch()
 
+  
 console.log(Items)
   const DeleteHandler = async (item) => {
-    
+    dispatch(ExpenseActions.DeleteExpense(item))
+    dispatch(ExpenseActions.SubAmount(Number(item.Amount)))
+    console.log(totalAmount)
+    const email=localStorage.getItem('Email')
+        const Email=email.replace('@','').replace(".",'')
     const response = await fetch(
-      `https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses/${item.key}.json`,
+      `https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses/${Email}/${item.key}.json`,
       {
         method: "DELETE",
         body: null,
@@ -18,7 +27,7 @@ console.log(Items)
       }
     );
     const data = await response.json();
-    props.fetch()
+    // props.fetch()
   };
   const EditHandler = (item) => {
     props.Edit(item);
@@ -39,6 +48,7 @@ console.log(Items)
         borderWidth: "5px",
       }}
     >
+        
       <h2 style={{ marginBottom: "2px", display: "inline" }}>
         {item.Category}
       </h2>

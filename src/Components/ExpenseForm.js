@@ -2,48 +2,72 @@ import React, { useEffect } from "react";
 import './ExpenseForm.css'
 import { useRef,useState } from "react";
 import ExpenseItem from "./ExpenseItem";
-
+import { ExpenseActions } from "./store/index";
+import { useSelector,useDispatch } from "react-redux";
 const ExpenseForm=()=>{
-    const[Items,SetItems]=useState([]);
+    const dataFetchedRef = useRef(false)
+    const Expense = useSelector(state=>state.ExpenseReducer.Expenses)
+    const totalAmount = useSelector(state=>state.ExpenseReducer.totalAmount)
+    const dispatch = useDispatch()
     const AmountRef=useRef();
     const DescriptionRef=useRef();
     const CategoryRef=useRef();
 
     const FetchExpenseHandler=async()=>{
-
-            const response=await fetch('https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses.json/',)
+        const email=localStorage.getItem('Email')
+        const Email=email.replace('@','').replace(".",'')
+            const response=await fetch(`https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses/${Email}.json/`,)
                 if(!response.ok){
                     throw new Error('something went wrong')
                 }
                 const data=await response.json()
                 // console.log(data)
                 const loadedExpense=[]
+                
                 for(const key in data){
+                    dispatch(ExpenseActions.AddAmount(Number(data[key].Amount)))
                     loadedExpense.unshift({
                         key:key,
                        Amount:data[key].Amount,
                        Category:data[key].Category,
-                       Description:data[key].Description
+                       Description:data[key].Description,
+                       
+                       
                     })
                     
                 }
-                SetItems(loadedExpense)
-                    // console.log(Items)
+                // let amount=0
+                // loadedExpense.map((item)=>{
+                //     amount+=item.Amount
+                // })
+                // dispatch(ExpenseActions.AddAmount(Number(amount)))
+                dispatch(ExpenseActions.FetchExpense(loadedExpense))
+                
+                    
             
     }
+    console.log(totalAmount)
     useEffect(()=>{
+        if (dataFetchedRef.current) return;
+      dataFetchedRef.current = true;
         FetchExpenseHandler()
     },[])
     
     const SubmitHandler=async(e)=>{
         e.preventDefault();
+        console.log(totalAmount)
         const EnteredExpense={
             Amount:AmountRef.current.value,
             Description:DescriptionRef.current.value,
             Category:CategoryRef.current.value
         }
-        // SetItems([...Items,EnteredExpense])
-        const response=await fetch('https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses.json/',{
+        dispatch(ExpenseActions.AddAmount(Number(EnteredExpense.Amount)))
+        console.log(totalAmount)
+        // dispatch(ExpenseActions.AddAmount(Amount))
+        // console.log(Amount)
+        const email=localStorage.getItem('Email')
+            const Email=email.replace('@','').replace(".",'')
+        const response=await fetch(`https://expense-tracker-10a49-default-rtdb.firebaseio.com/expenses/${Email}.json`,{
             method:"POST",
             body:JSON.stringify(EnteredExpense),
                 Headers:{
@@ -51,11 +75,12 @@ const ExpenseForm=()=>{
                 }
         })
         const data=await response.json()
-        // console.log(data)
+        console.log(data)
+        dispatch(ExpenseActions.AddExpense({...EnteredExpense,key:data.name}))
         AmountRef.current.value=''
         DescriptionRef.current.value=''
         CategoryRef.current.value=''
-        FetchExpenseHandler()
+        // FetchExpenseHandler()
     }
     const EditHandler=async(item)=>{
         AmountRef.current.value=item.Amount
@@ -91,8 +116,9 @@ const ExpenseForm=()=>{
                 <option value="Travel">Travel</option>
             </select><br/>
             <input className="input" style={{marginTop:"5px"}} type="submit"></input>
+           {totalAmount>10000 &&<button style={{background:"orange",height:"30px",marginLeft:"5px"}}>Activate Premium</button>}
         </form>
-        <ExpenseItem fetch={FetchExpenseHandler} Edit={EditHandler} Items={Items}></ExpenseItem>
+        <ExpenseItem fetch={FetchExpenseHandler} Edit={EditHandler} Items={Expense}></ExpenseItem>
         </div>
 
 

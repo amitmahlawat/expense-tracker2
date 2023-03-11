@@ -1,43 +1,56 @@
 import React from "react";
 import { useContext } from "react";
-import AuthContext from "./Components/Auth-context";
-import { Button } from "react-bootstrap";
+import { Button, Navbar } from "react-bootstrap";
 import Signup from "./Components/Signup";
 import Login from "./Components/Login";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route,NavLink } from "react-router-dom";
 import Welcome from "./Components/WelcomePage";
 import UpdateProfile from "./Components/UpdateProfile";
 import { useHistory } from "react-router-dom";
 import ResetPassword from "./Components/Resetpassword";
 import Expenses from "./Components/Expenses";
-
+import { useDispatch,useSelector } from "react-redux";
+import { authActions } from "./Components/store";
+import { ExpenseActions } from "./Components/store";
 function App() {
+  const dispatch=useDispatch()
+  const totalAmount = useSelector(state=>state.ExpenseReducer.totalAmount)
+const IsLoggedIn=useSelector(state=>state.AuthReducer.isLoggedIn)
   const history=useHistory()
-  const authCtx=useContext(AuthContext)
+
   const logoutHandler=()=>{
-    authCtx.logout()
+    dispatch(authActions.LogOut())
+    localStorage.clear()
     history.replace('/login')
   }
 
   return (
     <div>
-      <Route path="/expenses">
+      <Navbar style={{background:'black'}}>
+      
+      {IsLoggedIn && <Button  style={{marginLeft:"0%"}} variant=" btn-outline-info "><NavLink style={{textDecoration:"none"}} to='/expenses'>Expenses</NavLink></Button>}
+      {IsLoggedIn && <Button style={{marginLeft:"80%"}} onClick={logoutHandler}>Logout</Button>}
+      {!IsLoggedIn && <Button variant=" btn-outline-info "><NavLink style={{textDecoration:"none"}} to='/login'>Login</NavLink></Button>}
+      
+      </Navbar>
+      
+      {IsLoggedIn && <Route path="/expenses">
       <Expenses/>
-      </Route>
-     {authCtx.isLoggedIn && <Button onClick={logoutHandler}>Logout</Button>}
+      </Route>}
+     
       <Route path="/profile">
       <UpdateProfile/>
       </Route>
       <Route path="/" exact>
         <Redirect to="/welcome"/>
       </Route>
-      {authCtx.isLoggedIn &&<Route path="/welcome">
+      {IsLoggedIn && <Route path="/welcome">
         <Welcome/>
       </Route>}
       <Route path='/signup'>
       <Signup/>
       </Route>
-      {!authCtx.isLoggedIn &&<Route path='/login'>
+      {!IsLoggedIn &&<Route path='/login'>
       <Login/>
       </Route>}
       <Route path="/resetpassword">

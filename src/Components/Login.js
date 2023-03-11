@@ -1,4 +1,6 @@
 import React, { useRef, useState,useContext, } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import {authActions} from './store/index'
 import {
   Container,
   Row,
@@ -9,17 +11,20 @@ import {
   NavLink,
   Nav
 } from "react-bootstrap";
-import AuthContext from "./Auth-context";
+
 import { useHistory,Link } from "react-router-dom";
 
 const Login = () => {
+  const dispatch=useDispatch()
+const IsLoggedIn=useSelector(state=>state.AuthReducer.isLoggedIn)
 const history = useHistory()
-  const authCtx=useContext(AuthContext)
+
   const EmailRef = useRef();
   const PasswordRef = useRef();
   const confirmPasswordRef = useRef();
 
   const formSubmitHandler = (e) => {
+    
     e.preventDefault();
     const enteredEmail = EmailRef.current.value;
     const enteredPassword = PasswordRef.current.value;
@@ -41,7 +46,11 @@ const history = useHistory()
     ).then((res) => {
       if (res.ok) {
         res.json().then((data) => {
-          authCtx.login(data.idToken)
+          console.log(data)
+          localStorage.setItem('token',data.idToken)
+          dispatch(authActions.Login())
+          console.log(IsLoggedIn)
+          localStorage.setItem("Email", data.email)
           history.replace('/')
           
         });
@@ -52,6 +61,7 @@ const history = useHistory()
       }
     });
   };
+  
 
   return (
     <body >
